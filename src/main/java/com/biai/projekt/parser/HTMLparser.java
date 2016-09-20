@@ -10,7 +10,7 @@ import java.io.IOException;
 /**
  * Created by Peter on 2016-09-19.
  */
-public class StatsParser {
+public class HTMLparser {
 
     private Document page;
 
