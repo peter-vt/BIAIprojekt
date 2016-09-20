@@ -23,6 +23,9 @@ public class Match {
     private String guestRecievePerformance;
     private String guestBlocks;
 
+    public Match(){
+
+    }
 
     public Match(String homeName, String guestName, String homePoints, String guestPoints, String audience, String homeAttackPerformance, String homeRecievePerformance, String homeBlocks, String guestAttackPerformance, String guestRecievePerformance, String guestBlocks) {
         this.homeName = homeName;

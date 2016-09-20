@@ -2,10 +2,12 @@ package com.biai.projekt.UI;
 
 import com.biai.projekt.model.Match;
 import com.biai.projekt.network.Solution;
+import com.biai.projekt.parser.CSVmanager;
 import com.biai.projekt.parser.HTMLparser;
+import org.neuroph.core.data.DataSet;
+import org.neuroph.core.data.DataSetRow;
 
 import java.io.IOException;
-import java.util.Iterator;
 import java.util.Scanner;
 import java.util.Vector;
 
@@ -61,18 +63,56 @@ public class Application {
     }
 
     private void testNetwork() {
-        solution.testNetwork();
         System.out.println("How would you want to test network?");
+        System.out.println("1 - Automatic tests");
+        System.out.println("2 - Manual test");
 
-    }
+        int whichTest = getInt();
 
-    private void manualTest() {
-
+        switch (whichTest) {
+            case 1:
+                automaticTest();
+                break;
+            case 2:
+                manualTest();
+                break;
+            default:
+                break;
+        }
     }
 
     private void automaticTest() {
+        solution.testNetwork();
+    }
+
+    private void manualTest() {
+        double HAP, HRP, HBR, GAP, GRP, GBR;
+
+
+        try {
+            System.out.print("Home attack performance: ");
+            HAP = reader.nextDouble();
+            System.out.print("Home receive performance: ");
+            HRP = reader.nextDouble();
+            System.out.print("Home block ratio: ");
+            HBR = reader.nextDouble();
+            System.out.print("Guest attack performance: ");
+            GAP = reader.nextDouble();
+            System.out.print("Guest receive performance: ");
+            GRP = reader.nextDouble();
+            System.out.print("Guest block ratio: ");
+            GBR = reader.nextDouble();
+
+            solution.callTest(HAP, HRP, HBR, GAP, GRP, GBR);
+
+        } catch (Exception exc) {
+            System.out.println("Wrong input!");
+            return;
+        }
+
 
     }
+
 
     private void createNetwork() {
         String networkDataFile = "", outputFile = "";
@@ -134,59 +174,75 @@ public class Application {
             match.getHomeName();
             System.out.println(match);
         }
+        DataSet trainingSet = createStats(matches);
+        CSVmanager.writeDataSetToFile("PlusLiga20152016.csv", trainingSet);
+        System.out.println("Created " + trainingSet.size() + " data test");
 
-        //TODO
-        //Update forward teams
-        Iterator<Match> iterator = matches.iterator();
-        Match tmp;
-        Iterator<Match> tmpIterator;
-        boolean homeDone = false, guestDone = false;
+        for (Match match : matches) {
+            match.getHomeName();
+            System.out.println(match);
+        }
+    }
 
-        for (; iterator.hasNext(); iterator.next()) {
-            tmpIterator = matches.iterator();
-            tmp = (Match) iterator;
+    private DataSet createStats(Vector<Match> matches) {
+        Match currentMatch;
+        DataSet trainingSet = new DataSet(6, 2);
+        Match tmpMatch = new Match();
+        for (int i = 1; i < matches.size(); i++) {
+            currentMatch = matches.elementAt(i);
+            if (currentMatch.getHomePoints().compareTo(currentMatch.getGuestPoints()) == 1) {
+                tmpMatch.setHomePoints("1");
+                tmpMatch.setGuestPoints("0");
+            } else {
+                tmpMatch.setHomePoints("0");
+                tmpMatch.setGuestPoints("1");
+            }
 
-            for (; tmpIterator.hasNext(); tmpIterator.next()) {
-                Match nextMatch = (Match) tmpIterator;
-                if (nextMatch.getHomeName().equals(tmp.getHomeName()) && !homeDone ) {
-                    nextMatch.setHomeAttackPerformance(tmp.getHomeAttackPerformance());
-                    nextMatch.setHomeRecievePerformance(tmp.getHomeRecievePerformance());
-                    nextMatch.setHomeBlocks(tmp.getHomeBlocks());
+            boolean homeDone = false, guestDone = false;
+            for (int k = i - 1; k >= 0; k--) {
+                if (currentMatch.getHomeName().equals(matches.elementAt(k).getHomeName()) && !homeDone) {
+                    tmpMatch.setHomeAttackPerformance(matches.elementAt(k).getHomeAttackPerformance());
+                    tmpMatch.setHomeRecievePerformance(matches.elementAt(k).getHomeRecievePerformance());
+                    tmpMatch.setHomeBlocks(matches.elementAt(k).getHomeBlocks());
                     homeDone = true;
-                } else if (nextMatch.getHomeName().equals(tmp.getGuestName()) && !guestDone) {
-                    nextMatch.setHomeAttackPerformance(tmp.getGuestAttackPerformance());
-                    nextMatch.setHomeRecievePerformance(tmp.getGuestRecievePerformance());
-                    nextMatch.setHomeBlocks(tmp.getGuestBlocks());
-                    guestDone = true;
-                }  else if (nextMatch.getGuestName().equals(tmp.getHomeName()) && !homeDone) {
-                    nextMatch.setGuestAttackPerformance(tmp.getHomeAttackPerformance());
-                    nextMatch.setGuestRecievePerformance(tmp.getHomeRecievePerformance());
-                    nextMatch.setGuestBlocks(tmp.getHomeBlocks());
+                }
+                if (currentMatch.getHomeName().equals(matches.elementAt(k).getGuestName()) && !homeDone) {
+                    tmpMatch.setHomeAttackPerformance(matches.elementAt(k).getGuestAttackPerformance());
+                    tmpMatch.setHomeRecievePerformance(matches.elementAt(k).getGuestRecievePerformance());
+                    tmpMatch.setHomeBlocks(matches.elementAt(k).getGuestBlocks());
                     homeDone = true;
-                }  else if (nextMatch.getGuestName().equals(tmp.getGuestName()) && !guestDone) {
-                    nextMatch.setGuestAttackPerformance(tmp.getGuestAttackPerformance());
-                    nextMatch.setGuestRecievePerformance(tmp.getGuestRecievePerformance());
-                    nextMatch.setGuestBlocks(tmp.getGuestBlocks());
+                }
+                if (currentMatch.getGuestName().equals(matches.elementAt(k).getHomeName()) && !guestDone) {
+                    tmpMatch.setGuestAttackPerformance(matches.elementAt(k).getHomeAttackPerformance());
+                    tmpMatch.setGuestRecievePerformance(matches.elementAt(k).getHomeRecievePerformance());
+                    tmpMatch.setGuestBlocks(matches.elementAt(k).getHomeBlocks());
                     guestDone = true;
                 }
-
+                if (currentMatch.getGuestName().equals(matches.elementAt(k).getGuestName()) && !guestDone) {
+                    tmpMatch.setGuestAttackPerformance(matches.elementAt(k).getGuestAttackPerformance());
+                    tmpMatch.setGuestRecievePerformance(matches.elementAt(k).getGuestRecievePerformance());
+                    tmpMatch.setGuestBlocks(matches.elementAt(k).getGuestBlocks());
+                    guestDone = true;
+                }
                 if (homeDone && guestDone) {
+                    trainingSet.addRow(matchToDataSetRow(tmpMatch));
                     break;
                 }
             }
-            iterator.remove();
         }
-
-        for (Match match : matches) {
-            System.out.println(match);
-        }
-        System.out.println("Fetched " + howManyFetched);
-
-
+        return trainingSet;
     }
 
-    private void updateTeam() {
-
+    private DataSetRow matchToDataSetRow(Match match) {
+        return new DataSetRow(new double[]{
+                10 / Double.parseDouble(match.getHomeAttackPerformance().replaceAll("[^\\d.]", "")),
+                10 / Double.parseDouble(match.getHomeRecievePerformance().replaceAll("[^\\d.]", "")),
+                1 / Double.parseDouble(match.getHomeBlocks().replaceAll("[^\\d.]", "")),
+                10 / Double.parseDouble(match.getGuestAttackPerformance().replaceAll("[^\\d.]", "")),
+                10 / Double.parseDouble(match.getGuestRecievePerformance().replaceAll("[^\\d.]", "")),
+                1 / Double.parseDouble(match.getGuestBlocks().replaceAll("[^\\d.]", ""))},
+                new double[]{Double.parseDouble(match.getHomePoints()),
+                        Double.parseDouble(match.getGuestPoints())});
     }
 
     private Match parseData(String URL) throws IOException {

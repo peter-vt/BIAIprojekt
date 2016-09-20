@@ -18,9 +18,9 @@ public class OurNetwork {
 
 
     public void createNetworkAndDataTest(int inputNeurons, int outputNeurons) {
-        neuralNetwork = new MultiLayerPerceptron(TransferFunctionType.SIGMOID, inputNeurons, 10, outputNeurons);
+        neuralNetwork = new MultiLayerPerceptron(TransferFunctionType.SIGMOID, inputNeurons, 20, outputNeurons);
         MomentumBackpropagation learningRule = (MomentumBackpropagation) neuralNetwork.getLearningRule();
-        learningRule.setLearningRate(0.6);
+        learningRule.setLearningRate(0.3);
         learningRule.setMomentum(0.7);
         trainingSet = new DataSet(inputNeurons, outputNeurons);
     }

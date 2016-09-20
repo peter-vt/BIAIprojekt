@@ -29,16 +29,27 @@ public class Solution {
             return;
         }
 
-        callTest(6.1, 3.3, 45, 49, 36, 26, 0, 1);
-        callTest(3.6, 3.2, 42, 48, 33, 30, 1, 0);
-        callTest(4.5,3.5,38,52,41,38,0,1);
-        callTest(4.2,4.3,39,51,28,21,1,0);
-        callTest(3.7,4.4,46,41,23,28,0,1);
+        callTest(0.21739130434782608, 0.45454545454545453, 0.08333333333333333, 0.23809523809523808, 0.38461538461538464, 0.5, 0.0, 1.0);
+        callTest(0.2631578947368421, 0.30303030303030304, 0.1, 0.20833333333333334, 0.5, 0.07142857142857142, 0.0, 1.0);
+        callTest(0.21739130434782608, 0.38461538461538464, 0.08333333333333333, 0.23809523809523808, 0.5882352941176471, 0.07142857142857142, 0.0, 1.0);
+        callTest(0.21739130434782608, 0.38461538461538464, 0.08333333333333333, 0.23809523809523808, 0.5882352941176471, 0.07142857142857142, 0.0, 1.0);
+        callTest(0.21739130434782608, 0.38461538461538464, 0.08333333333333333, 0.21739130434782608, 0.38461538461538464, 0.08333333333333333, 0.0, 1.0);
+        callTest(0.23809523809523808, 0.38461538461538464, 0.5, 0.2222222222222222, 0.5555555555555556, 0.16666666666666666, 0.0, 1.0);
+
     }
 
-    private void callTest(double a, double b, double c, double d, double e, double f, int res1, int res2) {
-        double[] outputResults = project.calculateInput(1/a, 1/b, 10/c, 10/d, 10/e, 10/f);
-        System.out.print("Expected " + res1 + res2 + " get ");
+    public void callTest(double a, double b, double c, double d, double e, double f){
+        double[] outputResults = project.calculateInput(a, b, c, d, e, f);
+        if (outputResults[0] > outputResults[1]) {
+            System.out.println("Home win");
+        } else {
+            System.out.println("Guest win");
+        }
+    }
+
+    private void callTest(double a, double b, double c, double d, double e, double f, double res1, double res2) {
+        double[] outputResults = project.calculateInput(a, b, c, d, e, f);
+        System.out.print("Expected " + (int)res1 + (int)res2 + " get ");
         for (double outputResult : outputResults) {
             System.out.print( Math.round(outputResult));
         }
