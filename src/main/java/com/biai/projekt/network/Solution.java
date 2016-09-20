@@ -37,7 +37,7 @@ public class Solution {
     }
 
     private void callTest(double a, double b, double c, double d, double e, double f, int res1, int res2) {
-        double[] outputResults = project.calculateInput(6.1, 3.3, 45, 49, 36, 26);
+        double[] outputResults = project.calculateInput(1/a, 1/b, 10/c, 10/d, 10/e, 10/f);
         System.out.print("Expected " + res1 + res2 + " get ");
         for (double outputResult : outputResults) {
             System.out.print( Math.round(outputResult));

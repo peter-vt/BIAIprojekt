@@ -28,10 +28,10 @@ public class CSVmanager {
                 trainingSet.addRow(new DataSetRow(new double[]{
                         1 / Double.parseDouble(nextLine[0].replace(',', '.')),
                         1 / Double.parseDouble(nextLine[1].replace(',', '.')),
-                        1 / Double.parseDouble(nextLine[2].replace(',', '.')),
-                        1 / Double.parseDouble(nextLine[3].replace(',', '.')),
-                        1 / Double.parseDouble(nextLine[4].replace(',', '.')),
-                        1 / Double.parseDouble(nextLine[5].replace(',', '.')),},
+                        10 / Double.parseDouble(nextLine[2].replace(',', '.')),
+                        10 / Double.parseDouble(nextLine[3].replace(',', '.')),
+                        10 / Double.parseDouble(nextLine[4].replace(',', '.')),
+                        10 / Double.parseDouble(nextLine[5].replace(',', '.')),},
                         new double[]{Double.parseDouble(nextLine[6].replace(',', '.')),
                                 Double.parseDouble(nextLine[7].replace(',', '.'))}));
             }
