@@ -32,10 +32,11 @@ public class Application {
             System.out.println("Welcome!");
             System.out.println("Use this app to predicting volleyball match winner");
             System.out.println("Choose your action: ");
-            System.out.println("1 - test network");
+            System.out.println("1 - Test network");
             System.out.println("2 - Load network");
             System.out.println("3 - Create network from given input");
             System.out.println("4 - Fetch data from remote");
+            System.out.println("5 - Add data to network");
             System.out.println("0 - to quit");
 
             int option = getOption();
@@ -45,7 +46,7 @@ public class Application {
                     testNetwork();
                     break;
                 case 2:
-                    solution.loadNetwork("PlusLiga20152016.nnet");
+                    loadNetwork();
                     break;
                 case 3:
                     createNetwork();
@@ -53,6 +54,8 @@ public class Application {
                 case 4:
                     fetchData();
                     break;
+                case 5:
+                    addDataToNetwork();
                 case 0:
                 default:
                     runApp = false;
@@ -113,7 +116,11 @@ public class Application {
 
     }
 
-
+    private void loadNetwork() {
+        System.out.print("Enter network file name: ");
+        String fileName = reader.next();
+        solution.loadNetwork(fileName);
+    }
     private void createNetwork() {
         String networkDataFile = "", outputFile = "";
 
@@ -190,7 +197,7 @@ public class Application {
         Match tmpMatch = new Match();
         for (int i = 1; i < matches.size(); i++) {
             currentMatch = matches.elementAt(i);
-            if (currentMatch.getHomePoints().compareTo(currentMatch.getGuestPoints()) == 1) {
+            if (currentMatch.getHomePoints().compareTo(currentMatch.getGuestPoints()) > 0) {
                 tmpMatch.setHomePoints("1");
                 tmpMatch.setGuestPoints("0");
             } else {
@@ -249,6 +256,19 @@ public class Application {
         return parser.parse(URL);
     }
 
+    private void addDataToNetwork() {
+        String networkDataFile = "", outputFile = "";
+
+        System.out.print("Enter csv data file name: ");
+        networkDataFile = reader.next();
+
+        System.out.print("Enter output file name: ");
+        outputFile = reader.next();
+
+        solution.learnNewThings(networkDataFile, outputFile);
+
+        System.out.println("Network created and saved to " + outputFile + " file");
+    }
     private int getOption() {
         System.out.print("Option:  ");
         int n = 0;
@@ -256,7 +276,7 @@ public class Application {
         do {
             try {
                 n = getInt();
-                if (n < 0 || n > 4) {
+                if (n < 0 || n > 5) {
                     throw new Exception("Out of range");
                 }
                 wrongInput = false;

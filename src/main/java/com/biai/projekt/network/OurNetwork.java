@@ -3,8 +3,6 @@ package com.biai.projekt.network;
 import com.biai.projekt.parser.CSVmanager;
 import org.neuroph.core.NeuralNetwork;
 import org.neuroph.core.data.DataSet;
-import org.neuroph.core.learning.LearningRule;
-import org.neuroph.core.transfer.Sigmoid;
 import org.neuroph.nnet.MultiLayerPerceptron;
 import org.neuroph.nnet.learning.MomentumBackpropagation;
 import org.neuroph.util.TransferFunctionType;
@@ -18,10 +16,11 @@ public class OurNetwork {
 
 
     public void createNetworkAndDataTest(int inputNeurons, int outputNeurons) {
-        neuralNetwork = new MultiLayerPerceptron(TransferFunctionType.SIGMOID, inputNeurons, 20, outputNeurons);
-        MomentumBackpropagation learningRule = (MomentumBackpropagation) neuralNetwork.getLearningRule();
-        learningRule.setLearningRate(0.3);
-        learningRule.setMomentum(0.7);
+        neuralNetwork = new MultiLayerPerceptron(TransferFunctionType.SIGMOID, inputNeurons, 100, outputNeurons);
+        MomentumBackpropagation learningRule = new MomentumBackpropagation();
+        learningRule.setLearningRate(0.05);
+        learningRule.setMomentum(0.4);
+        neuralNetwork.setLearningRule(learningRule);
         trainingSet = new DataSet(inputNeurons, outputNeurons);
     }
 

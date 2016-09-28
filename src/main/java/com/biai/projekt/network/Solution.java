@@ -9,6 +9,11 @@ public class Solution {
 
     public void createNetwork(String CSVfileName, String networkFileName) {
         project.createNetworkAndDataTest(6, 2);
+        learnNewThings(CSVfileName, networkFileName);
+    }
+
+
+    public void learnNewThings(String CSVfileName, String networkFileName) {
         project.readDataSetFromFile(CSVfileName);
         project.networkLearn();
         project.saveNetwork(networkFileName);
@@ -38,7 +43,7 @@ public class Solution {
 
     }
 
-    public void callTest(double a, double b, double c, double d, double e, double f){
+    public void callTest(double a, double b, double c, double d, double e, double f) {
         double[] outputResults = project.calculateInput(a, b, c, d, e, f);
         if (outputResults[0] > outputResults[1]) {
             System.out.println("Home win");
@@ -49,9 +54,9 @@ public class Solution {
 
     private void callTest(double a, double b, double c, double d, double e, double f, double res1, double res2) {
         double[] outputResults = project.calculateInput(a, b, c, d, e, f);
-        System.out.print("Expected " + (int)res1 + (int)res2 + " get ");
+        System.out.print("Expected " + (int) res1 + (int) res2 + " get ");
         for (double outputResult : outputResults) {
-            System.out.print( Math.round(outputResult));
+            System.out.print(Math.round(outputResult));
         }
         System.out.println();
     }
